@@ -1,0 +1,38 @@
+#!/bin/bash
+
+load inquirer
+
+check() {
+  if [ ! -f $SERVICE_CONFIG ]; then
+     touch $SERVICE_CONFIG
+  fi
+  config::load_file $SERVICE_CONFIG
+
+  if [ -z "$SERVICE_NPS_SECRET" ]; then
+    inquirer::text "请输入 SERVICE_NPS_SECRET:" value "$(os::uuid)"
+    config::set SERVICE_NPS_SECRET $value $SERVICE_CONFIG
+
+    # setup
+    cp -rf $SERVICE_DIR/conf/* $SERVICE_CONFIGS
+    sed -i 's/<SERVICE_NPS_CONFIG>/'${SERVICE_NPS_SECRET}'/g' $SERVICE_NPS_CONFIG
+  fi
+
+  if [ -z "$SERVICE_NPS_PORT" ]; then
+    inquirer::text "请输入 SERVICE_NPS_PORT:" value
+    config::set SERVICE_NPS_PORT $value $SERVICE_CONFIG
+  fi
+
+  if [ -z "$SERVICE_NPS_OUT_PORTS" ]; then
+    inquirer::text "请输入 SERVICE_NPS_OUT_PORTS:" value
+    config::set SERVICE_NPS_OUT_PORTS $value $SERVICE_CONFIG
+  fi
+
+  # load again
+  config::load_file $SERVICE_CONFIG
+  
+  # @TODO
+  export SERVICE_NPS_PORT=$SERVICE_NPS_PORT
+  export SERVICE_NPS_OUT_PORTS=$SERVICE_NPS_OUT_PORTS
+}
+
+check $@

@@ -1,0 +1,19 @@
+version: '3.7'
+
+
+services:
+  nps:
+    restart: always
+    image: ffdfgdfg/nps:${VERSION}
+    ports:
+      # Bridge 端口
+      - 0.0.0.0:${SERVICE_NPS_PORT}:8024
+      # 外网访问端口
+      - 0.0.0.0:${SERVICE_NPS_OUT_PORTS}:${SERVICE_NPS_OUT_PORTS}
+    volumes:
+      - $SERVICE_CONFIGS:/conf
+
+networks:
+  default:
+    external: true
+    name: compose-ingress
