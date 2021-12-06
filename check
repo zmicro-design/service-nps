@@ -14,7 +14,17 @@ check() {
 
     # setup
     cp -rf $SERVICE_DIR/conf/* $SERVICE_CONFIGS
-    sed -i 's/<SERVICE_NPS_CONFIG>/'${SERVICE_NPS_SECRET}'/g' $SERVICE_NPS_CONFIG
+    sed -i 's/<SERVICE_NPS_SECRET>/'${SERVICE_NPS_SECRET}'/g' $SERVICE_NPS_CONFIG
+  fi
+
+  if [ -z "$SERVICE_NPS_USERNAME" ]; then
+    inquirer::text "请输入 SERVICE_NPS_USERNAME:" value
+    config::set SERVICE_NPS_USERNAME $value $SERVICE_CONFIG
+  fi
+
+  if [ -z "$SERVICE_NPS_PASSWORD" ]; then
+    inquirer::text "请输入 SERVICE_NPS_PASSWORD:" value
+    config::set SERVICE_NPS_PASSWORD $value $SERVICE_CONFIG
   fi
 
   if [ -z "$SERVICE_NPS_PORT" ]; then
@@ -33,6 +43,13 @@ check() {
   # @TODO
   export SERVICE_NPS_PORT=$SERVICE_NPS_PORT
   export SERVICE_NPS_OUT_PORTS=$SERVICE_NPS_OUT_PORTS
+  export SERVICE_NPS_USERNAME=$SERVICE_NPS_USERNAME
+  export SERVICE_NPS_PASSWORD=$SERVICE_NPS_PASSWORD
+
+  # Dynamic Update Config
+  sed -i 's/<SERVICE_NPS_SECRET>/'${SERVICE_NPS_SECRET}'/g' $SERVICE_NPS_CONFIG
+  sed -i 's/<SERVICE_NPS_USERNAME>/'${SERVICE_NPS_USERNAME}'/g' $SERVICE_NPS_CONFIG
+  sed -i 's/<SERVICE_NPS_PASSWORD>/'${SERVICE_NPS_PASSWORD}'/g' $SERVICE_NPS_CONFIG
 }
 
 check $@
