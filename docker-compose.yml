@@ -4,7 +4,7 @@ version: '3.7'
 services:
   nps:
     restart: always
-    image: whatwewant/nps:${VERSION}
+    image: whatwewant/nps:${SERVICE_NPS_VERSION}
     ports:
       # Bridge 端口
       - 0.0.0.0:${SERVICE_NPS_PORT}:8024

@@ -13,8 +13,18 @@ check() {
     config::set SERVICE_NPS_SECRET $value $SERVICE_CONFIG
 
     # setup
-    cp -rf $SERVICE_DIR/conf/* $SERVICE_CONFIGS
-    sed -i 's/<SERVICE_NPS_CONFIG>/'${SERVICE_NPS_SECRET}'/g' $SERVICE_NPS_CONFIG
+    # cp -rf $SERVICE_DIR/conf/* $SERVICE_CONFIGS
+    # sed -i 's/<SERVICE_NPS_SECRET>/'${SERVICE_NPS_SECRET}'/g' $SERVICE_NPS_CONFIG
+  fi
+
+  if [ -z "$SERVICE_NPS_USERNAME" ]; then
+    inquirer::text "请输入 SERVICE_NPS_USERNAME:" value
+    config::set SERVICE_NPS_USERNAME $value $SERVICE_CONFIG
+  fi
+
+  if [ -z "$SERVICE_NPS_PASSWORD" ]; then
+    inquirer::text "请输入 SERVICE_NPS_PASSWORD:" value
+    config::set SERVICE_NPS_PASSWORD $value $SERVICE_CONFIG
   fi
 
   if [ -z "$SERVICE_NPS_PORT" ]; then
