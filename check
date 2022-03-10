@@ -8,25 +8,6 @@ check() {
   fi
   config::load_file $SERVICE_CONFIG
 
-  if [ -z "$SERVICE_NPS_SECRET" ]; then
-    inquirer::text "请输入 SERVICE_NPS_SECRET:" value "$(os::uuid)"
-    config::set SERVICE_NPS_SECRET $value $SERVICE_CONFIG
-
-    # setup
-    # cp -rf $SERVICE_DIR/conf/* $SERVICE_CONFIGS
-    # sed -i 's/<SERVICE_NPS_SECRET>/'${SERVICE_NPS_SECRET}'/g' $SERVICE_NPS_CONFIG
-  fi
-
-  if [ -z "$SERVICE_NPS_USERNAME" ]; then
-    inquirer::text "请输入 SERVICE_NPS_USERNAME:" value
-    config::set SERVICE_NPS_USERNAME $value $SERVICE_CONFIG
-  fi
-
-  if [ -z "$SERVICE_NPS_PASSWORD" ]; then
-    inquirer::text "请输入 SERVICE_NPS_PASSWORD:" value
-    config::set SERVICE_NPS_PASSWORD $value $SERVICE_CONFIG
-  fi
-
   if [ -z "$SERVICE_NPS_PORT" ]; then
     inquirer::text "请输入 SERVICE_NPS_PORT:" value
     config::set SERVICE_NPS_PORT $value $SERVICE_CONFIG
@@ -43,7 +24,7 @@ check() {
   fi
 
   if [ -z "$SERVICE_NPS_SECRET" ]; then
-    inquirer::text "请输入 SERVICE_NPS_SECRET:" value "$(os::uuid)"
+    inquirer::text "请输入 SERVICE_NPS_SECRET:" value "$(os::random_string 16)"
     config::set SERVICE_NPS_SECRET $value $SERVICE_CONFIG
   fi
 
