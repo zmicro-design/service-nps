@@ -27,12 +27,37 @@ check() {
     config::set SERVICE_NPS_OUT_PORTS $value $SERVICE_CONFIG
   fi
 
+  if [ -z "$SERVICE_NPS_DOMAIN" ]; then
+    inquirer::text "请输入 SERVICE_NPS_DOMAIN:" value
+    config::set SERVICE_NPS_DOMAIN $value $SERVICE_CONFIG
+  fi
+
+  if [ -z "$SERVICE_NPS_SECRET" ]; then
+    inquirer::text "请输入 SERVICE_NPS_SECRET:" value "$(os::uuid)"
+    config::set SERVICE_NPS_SECRET $value $SERVICE_CONFIG
+  fi
+
+  if [ -z "$SERVICE_NPS_USERNAME" ]; then
+    inquirer::text "请输入 SERVICE_NPS_USERNAME:" value "$(os::uuid)"
+    config::set SERVICE_NPS_USERNAME $value $SERVICE_CONFIG
+  fi
+
+  if [ -z "$SERVICE_NPS_PASSWORD" ]; then
+    inquirer::text "请输入 SERVICE_NPS_PASSWORD:" value "$(os::uuid)"
+    config::set SERVICE_NPS_PASSWORD $value $SERVICE_CONFIG
+  fi
+
   # load again
   config::load_file $SERVICE_CONFIG
   
   # @TODO
   export SERVICE_NPS_PORT=$SERVICE_NPS_PORT
   export SERVICE_NPS_OUT_PORTS=$SERVICE_NPS_OUT_PORTS
+  #
+  export SERVICE_NPS_DOMAIN=$SERVICE_NPS_DOMAIN
+  export SERVICE_NPS_SECRET=$SERVICE_NPS_SECRET
+  export SERVICE_NPS_USERNAME=$SERVICE_NPS_USERNAME
+  export SERVICE_NPS_PASSWORD=$SERVICE_NPS_PASSWORD
 }
 
 check $@

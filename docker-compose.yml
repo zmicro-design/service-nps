@@ -4,14 +4,18 @@ version: '3.7'
 services:
   nps:
     restart: always
-    image: ffdfgdfg/nps:${VERSION}
+    image: whatwewant/nps:${VERSION}
     ports:
       # Bridge 端口
       - 0.0.0.0:${SERVICE_NPS_PORT}:8024
       # 外网访问端口
       - 0.0.0.0:${SERVICE_NPS_OUT_PORTS}:${SERVICE_NPS_OUT_PORTS}
-    volumes:
-      - $SERVICE_CONFIGS:/conf
+    environment:
+      TZ: Asia/Shanghai
+      DOMAIN: ${SERVICE_NPS_DOMAIN}
+      SECRET: ${SERVICE_NPS_SECRET}
+      USERNAME: ${SERVICE_NPS_USERNAME}
+      PASSWORD: ${SERVICE_NPS_PASSWORD}
 
 networks:
   default:
