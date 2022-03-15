@@ -6,28 +6,24 @@ check() {
   if [ ! -f $SERVICE_CONFIG ]; then
      touch $SERVICE_CONFIG
   fi
+
+  config::check_or_set SERVICE_NPS_PORT text $SERVICE_CONFIG
+  config::check_or_set SERVICE_NPS_PORT text $SERVICE_CONFIG
+  config::check_or_set SERVICE_NPS_OUT_PORTS text $SERVICE_CONFIG
+  #
+  config::check_or_set SERVICE_NPS_DOMAIN text $SERVICE_CONFIG
+  config::check_or_set SERVICE_NPS_SECRET text $SERVICE_CONFIG
+  #
+  # config::check_or_set SERVICE_NPS_USERNAME yesno $SERVICE_CONFIG
+  # config::check_or_set SERVICE_NPS_PASSWORD yesno $SERVICE_CONFIG
+  #
+  # config::check_or_set SERVICE_NPS_OAUTH2_ENABLE yesno $SERVICE_CONFIG
+  # config::check_or_set SERVICE_NPS_OAUTH2_SERVER_URL yesno $SERVICE_CONFIG
+  # config::check_or_set SERVICE_NPS_OAUTH2_CLIENT_ID yesno $SERVICE_CONFIG
+  # config::check_or_set SERVICE_NPS_OAUTH2_CLIENT_SECRET yesno $SERVICE_CONFIG
+
   config::load_file $SERVICE_CONFIG
-
-  if [ -z "$SERVICE_NPS_PORT" ]; then
-    inquirer::text "请输入 SERVICE_NPS_PORT:" value
-    config::set SERVICE_NPS_PORT $value $SERVICE_CONFIG
-  fi
-
-  if [ -z "$SERVICE_NPS_OUT_PORTS" ]; then
-    inquirer::text "请输入 SERVICE_NPS_OUT_PORTS:" value
-    config::set SERVICE_NPS_OUT_PORTS $value $SERVICE_CONFIG
-  fi
-
-  if [ -z "$SERVICE_NPS_DOMAIN" ]; then
-    inquirer::text "请输入 SERVICE_NPS_DOMAIN:" value
-    config::set SERVICE_NPS_DOMAIN $value $SERVICE_CONFIG
-  fi
-
-  if [ -z "$SERVICE_NPS_SECRET" ]; then
-    inquirer::text "请输入 SERVICE_NPS_SECRET:" value "$(os::random_string 16)"
-    config::set SERVICE_NPS_SECRET $value $SERVICE_CONFIG
-  fi
-
+  
   if [ -z "$SERVICE_NPS_OAUTH2_ENABLE" ]; then
     local choices=(
       "Yes"
