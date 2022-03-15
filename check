@@ -28,14 +28,46 @@ check() {
     config::set SERVICE_NPS_SECRET $value $SERVICE_CONFIG
   fi
 
-  if [ -z "$SERVICE_NPS_USERNAME" ]; then
-    inquirer::text "请输入 SERVICE_NPS_USERNAME:" value "$(os::uuid)"
-    config::set SERVICE_NPS_USERNAME $value $SERVICE_CONFIG
-  fi
+  if [ -z "$SERVICE_NPS_OAUTH2_ENABLE" ]; then
+    local choices=(
+      "Yes"
+      "No"
+    )
+    inquirer::select "Enable OAUTH2 ?" choices value
+    if [ "$value" = "Yes" ]; then
+      export SERVICE_NPS_OAUTH2_ENABLE=true
+    else
+      export SERVICE_NPS_OAUTH2_ENABLE=false
+    fi
 
-  if [ -z "$SERVICE_NPS_PASSWORD" ]; then
-    inquirer::text "请输入 SERVICE_NPS_PASSWORD:" value "$(os::uuid)"
-    config::set SERVICE_NPS_PASSWORD $value $SERVICE_CONFIG
+    config::set SERVICE_NPS_OAUTH2_ENABLE $SERVICE_NPS_OAUTH2_ENABLE $SERVICE_CONFIG
+  fi
+  
+  if [ "$SERVICE_NPS_OAUTH2_ENABLE" = "true" ]; then
+    if [ -z "$SERVICE_NPS_OAUTH2_SERVER_URL" ]; then
+      inquirer::text "请输入 SERVICE_NPS_OAUTH2_SERVER_URL:" value
+      config::set SERVICE_NPS_OAUTH2_SERVER_URL $value $SERVICE_CONFIG
+    fi
+
+    if [ -z "$SERVICE_NPS_OAUTH2_CLIENT_ID" ]; then
+      inquirer::text "请输入 SERVICE_NPS_OAUTH2_CLIENT_ID:" value
+      config::set SERVICE_NPS_OAUTH2_CLIENT_ID $value $SERVICE_CONFIG
+    fi
+
+    if [ -z "$SERVICE_NPS_OAUTH2_CLIENT_SECRET" ]; then
+      inquirer::text "请输入 SERVICE_NPS_OAUTH2_CLIENT_SECRET:" value
+      config::set SERVICE_NPS_OAUTH2_CLIENT_SECRET $value $SERVICE_CONFIG
+    fi
+  else
+    if [ -z "$SERVICE_NPS_USERNAME" ]; then
+      inquirer::text "请输入 SERVICE_NPS_USERNAME:" value "$(os::uuid)"
+      config::set SERVICE_NPS_USERNAME $value $SERVICE_CONFIG
+    fi
+
+    if [ -z "$SERVICE_NPS_PASSWORD" ]; then
+      inquirer::text "请输入 SERVICE_NPS_PASSWORD:" value "$(os::uuid)"
+      config::set SERVICE_NPS_PASSWORD $value $SERVICE_CONFIG
+    fi
   fi
 
   # load again
@@ -49,6 +81,10 @@ check() {
   export SERVICE_NPS_SECRET=$SERVICE_NPS_SECRET
   export SERVICE_NPS_USERNAME=$SERVICE_NPS_USERNAME
   export SERVICE_NPS_PASSWORD=$SERVICE_NPS_PASSWORD
+  export SERVICE_NPS_OAUTH2_ENABLE=$SERVICE_NPS_OAUTH2_ENABLE
+  export SERVICE_NPS_OAUTH2_SERVER_URL=$SERVICE_NPS_OAUTH2_SERVER_URL
+  export SERVICE_NPS_OAUTH2_CLIENT_ID=$SERVICE_NPS_OAUTH2_CLIENT_ID
+  export SERVICE_NPS_OAUTH2_CLIENT_SECRET=$SERVICE_NPS_OAUTH2_CLIENT_SECRET
 }
 
 check $@
