@@ -1,13 +1,14 @@
 version: '3.7'
 
-
 services:
   nps:
     restart: always
     image: whatwewant/nps:${SERVICE_NPS_VERSION}
     ports:
+      # # Bridge 端口
+      # - 0.0.0.0:${SERVICE_NPS_WEB_PORT}:8080
       # Bridge 端口
-      - 0.0.0.0:${SERVICE_NPS_PORT}:8024
+      - 0.0.0.0:${SERVICE_NPS_TUNNEL_PORT}:8024
       # 外网访问端口
       - 0.0.0.0:${SERVICE_NPS_OUT_PORTS}:${SERVICE_NPS_OUT_PORTS}
     environment:

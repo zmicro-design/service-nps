@@ -4,11 +4,11 @@ load inquirer
 
 check() {
   if [ ! -f $SERVICE_CONFIG ]; then
-     touch $SERVICE_CONFIG
+    touch $SERVICE_CONFIG
   fi
 
-  config::check_or_set SERVICE_NPS_PORT text $SERVICE_CONFIG
-  config::check_or_set SERVICE_NPS_PORT text $SERVICE_CONFIG
+  config::check_or_set SERVICE_NPS_WEB_PORT text $SERVICE_CONFIG
+  config::check_or_set SERVICE_NPS_TUNNEL_PORT text $SERVICE_CONFIG
   config::check_or_set SERVICE_NPS_OUT_PORTS text $SERVICE_CONFIG
   #
   config::check_or_set SERVICE_NPS_DOMAIN text $SERVICE_CONFIG
@@ -23,7 +23,7 @@ check() {
   # config::check_or_set SERVICE_NPS_OAUTH2_CLIENT_SECRET yesno $SERVICE_CONFIG
 
   config::load_file $SERVICE_CONFIG
-  
+
   if [ -z "$SERVICE_NPS_OAUTH2_ENABLE" ]; then
     local choices=(
       "Yes"
@@ -38,7 +38,7 @@ check() {
 
     config::set SERVICE_NPS_OAUTH2_ENABLE $SERVICE_NPS_OAUTH2_ENABLE $SERVICE_CONFIG
   fi
-  
+
   if [ "$SERVICE_NPS_OAUTH2_ENABLE" = "true" ]; then
     if [ -z "$SERVICE_NPS_OAUTH2_SERVER_URL" ]; then
       inquirer::text "请输入 SERVICE_NPS_OAUTH2_SERVER_URL:" value
@@ -68,9 +68,9 @@ check() {
 
   # load again
   config::load_file $SERVICE_CONFIG
-  
+
   # @TODO
-  export SERVICE_NPS_PORT=$SERVICE_NPS_PORT
+  export SERVICE_NPS_TUNNEL_PORT=$SERVICE_NPS_TUNNEL_PORT
   export SERVICE_NPS_OUT_PORTS=$SERVICE_NPS_OUT_PORTS
   #
   export SERVICE_NPS_DOMAIN=$SERVICE_NPS_DOMAIN
